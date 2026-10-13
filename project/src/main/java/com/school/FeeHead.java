@@ -1,27 +1,54 @@
+
 package com.school;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.math.BigDecimal;
+import java.util.Objects;
+import java.util.Locale;
 
-public class FeeStructure {
+public class FeeHead {
 
-    private String className;
-    private Set<FeeHead> feeHeads;
+    private String name;
+    private BigDecimal amount;
 
-    public FeeStructure(String className) {
-        this.className = className;
-        this.feeHeads = new HashSet<>();
+    public FeeHead(String name, BigDecimal amount) {
+        if (name == null || name.trim().isEmpty()) {
+            throw new IllegalArgumentException("Fee name cannot be empty");
+        }
+
+        if (amount == null || amount.compareTo(BigDecimal.ZERO) <= 0) {
+            throw new IllegalArgumentException(
+                    "Fee amount must be greater than zero"
+            );
+        }
+
+        this.name = name.trim();
+        this.amount = amount;
     }
 
-    public void addFeeHead(FeeHead feeHead) {
-        feeHeads.add(feeHead);
+    public String getName() {
+        return name;
     }
 
-    public String getClassName() {
-        return className;
+    public BigDecimal getAmount() {
+        return amount;
     }
 
-    public Set<FeeHead> getFeeHeads() {
-        return feeHeads;
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+
+        if (!(obj instanceof FeeHead)) {
+            return false;
+        }
+
+        FeeHead other = (FeeHead) obj;
+        return name.equalsIgnoreCase(other.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name.toLowerCase(Locale.ROOT));
     }
 }
