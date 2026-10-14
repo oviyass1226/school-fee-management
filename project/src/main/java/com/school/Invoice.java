@@ -1,12 +1,17 @@
 
 package com.school;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+
 public class Invoice {
 
     private String invoiceId;
     private Student student;
     private String term;
     private InvoiceStatus status;
+    private List<FeeHead> feeHeads;
 
     public Invoice(String invoiceId, Student student, String term) {
 
@@ -32,6 +37,29 @@ public class Invoice {
         this.student = student;
         this.term = term.trim();
         this.status = InvoiceStatus.UNPAID;
+        this.feeHeads = new ArrayList<>();
+    }
+
+    public void addFeeHead(FeeHead feeHead) {
+
+        if (feeHead == null) {
+            throw new IllegalArgumentException(
+                    "Fee head cannot be null"
+            );
+        }
+
+        feeHeads.add(feeHead);
+    }
+
+    public BigDecimal calculateTotal() {
+
+        BigDecimal total = BigDecimal.ZERO;
+
+        for (FeeHead feeHead : feeHeads) {
+            total = total.add(feeHead.getAmount());
+        }
+
+        return total;
     }
 
     public String getInvoiceId() {
@@ -48,5 +76,9 @@ public class Invoice {
 
     public InvoiceStatus getStatus() {
         return status;
+    }
+
+    public List<FeeHead> getFeeHeads() {
+        return new ArrayList<>(feeHeads);
     }
 }

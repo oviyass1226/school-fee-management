@@ -1,7 +1,7 @@
-
 package com.school;
 
 import org.junit.jupiter.api.Test;
+import java.math.BigDecimal;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -10,7 +10,6 @@ class InvoiceTest {
     @Test
     void shouldCreateInvoiceSuccessfully() {
         Student student = new Student("S101", "Arun", "10-A");
-
         Invoice invoice = new Invoice("INV101", student, "Term 1");
 
         assertEquals("INV101", invoice.getInvoiceId());
@@ -22,7 +21,6 @@ class InvoiceTest {
     @Test
     void shouldTrimInvoiceIdAndTerm() {
         Student student = new Student("S101", "Arun", "10-A");
-
         Invoice invoice = new Invoice(" INV101 ", student, " Term 1 ");
 
         assertEquals("INV101", invoice.getInvoiceId());
@@ -52,5 +50,37 @@ class InvoiceTest {
         assertThrows(IllegalArgumentException.class, () -> {
             new Invoice("INV101", student, " ");
         });
+    }
+
+    @Test
+    void shouldCalculateInvoiceTotal() {
+        Student student = new Student("S101", "Arun", "10-A");
+        Invoice invoice = new Invoice("INV101", student, "Term 1");
+
+        invoice.addFeeHead(
+                new FeeHead("Tuition", new BigDecimal("20000"))
+        );
+        invoice.addFeeHead(
+                new FeeHead("Transport", new BigDecimal("5000"))
+        );
+        invoice.addFeeHead(
+                new FeeHead("Exam", new BigDecimal("1000"))
+        );
+
+        assertEquals(
+                0,
+                new BigDecimal("26000").compareTo(invoice.calculateTotal())
+        );
+    }
+
+    @Test
+    void shouldReturnZeroForInvoiceWithNoFeeHeads() {
+        Student student = new Student("S101", "Arun", "10-A");
+        Invoice invoice = new Invoice("INV102", student, "Term 1");
+
+        assertEquals(
+                0,
+                BigDecimal.ZERO.compareTo(invoice.calculateTotal())
+        );
     }
 }
