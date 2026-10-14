@@ -41,4 +41,17 @@ public class InvoiceRepository {
     public Map<String, Invoice> getAllInvoices() {
         return new HashMap<>(invoices);
     }
+    
+    public Invoice findInvoice(String invoiceId) {
+
+        Invoice invoice = getInvoice(invoiceId);
+
+        if (invoice == null) {
+            throw new InvoiceNotFoundException(
+                    "Invoice not found: " + invoiceId
+            );
+        }
+
+        return invoice;
+    }
 }

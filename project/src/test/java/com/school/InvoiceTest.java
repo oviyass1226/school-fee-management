@@ -98,4 +98,39 @@ class InvoiceTest {
         assertEquals("Term 1", invoice.getTerm());
         assertEquals(InvoiceStatus.UNPAID, invoice.getStatus());
     }
+    
+    @Test
+    void shouldDisplayInvoiceDetails() {
+        Student student = new Student("S101", "Arun", "10-A");
+        Invoice invoice = new Invoice("INV104", student, "Term 1");
+
+        invoice.addFeeHead(
+                new FeeHead("Tuition", new BigDecimal("20000"))
+        );
+        invoice.addFeeHead(
+                new FeeHead("Transport", new BigDecimal("5000"))
+        );
+
+        java.io.ByteArrayOutputStream output =
+                new java.io.ByteArrayOutputStream();
+
+        System.setOut(new java.io.PrintStream(output));
+
+        try {
+            invoice.displayInvoice();
+        } finally {
+            System.setOut(new java.io.PrintStream(
+                    new java.io.FileOutputStream(java.io.FileDescriptor.out)
+            ));
+        }
+
+        String result = output.toString();
+
+        assertTrue(result.contains("INV104"));
+        assertTrue(result.contains("Arun"));
+        assertTrue(result.contains("Tuition: Rs. 20000"));
+        assertTrue(result.contains("Total: Rs. 25000"));
+        assertTrue(result.contains("Status: UNPAID"));
+    }
+
 }

@@ -60,4 +60,25 @@ class InvoiceRepositoryTest {
             repository.getInvoice(" ");
         });
     }
+    
+    @Test
+    void shouldFindExistingInvoice() {
+        InvoiceRepository repository = new InvoiceRepository();
+        Student student = new Student("S101", "Arun", "10-A");
+        Invoice invoice = new Invoice("INV101", student, "Term 1");
+
+        repository.addInvoice(invoice);
+
+        assertEquals(invoice, repository.findInvoice("INV101"));
+    }
+
+    @Test
+    void shouldThrowExceptionWhenInvoiceNotFound() {
+        InvoiceRepository repository = new InvoiceRepository();
+
+        assertThrows(InvoiceNotFoundException.class, () -> {
+            repository.findInvoice("INV999");
+        });
+    }
+
 }

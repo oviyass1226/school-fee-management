@@ -81,4 +81,24 @@ public class Invoice {
     public List<FeeHead> getFeeHeads() {
         return new ArrayList<>(feeHeads);
     }
+    
+    public void displayInvoice() {
+        System.out.println("Invoice ID: " + invoiceId);
+        System.out.println("Student ID: " + student.getStudentId());
+        System.out.println("Student Name: " + student.getName());
+        System.out.println("Class: " + student.getClassName());
+        System.out.println("Term: " + term);
+
+        System.out.println("Fee Details:");
+
+        for (FeeHead feeHead : feeHeads) {
+            System.out.println(
+                    feeHead.getName() + ": Rs. " + feeHead.getAmount()
+            );
+        }
+
+        System.out.println("Total: Rs. " + calculateTotal());
+        System.out.println("Status: " + status);
+    }
+
 }
