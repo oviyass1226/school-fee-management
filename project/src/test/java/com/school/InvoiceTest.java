@@ -83,4 +83,19 @@ class InvoiceTest {
                 BigDecimal.ZERO.compareTo(invoice.calculateTotal())
         );
     }
+    
+    @Test
+    void shouldCreateInvoiceUsingFactory() {
+        InvoiceFactory factory = new InvoiceFactory();
+        Student student = new Student("S101", "Arun", "10-A");
+
+        Invoice invoice = factory.createInvoice(
+                "INV103", student, "Term 1"
+        );
+
+        assertEquals("INV103", invoice.getInvoiceId());
+        assertEquals(student, invoice.getStudent());
+        assertEquals("Term 1", invoice.getTerm());
+        assertEquals(InvoiceStatus.UNPAID, invoice.getStatus());
+    }
 }
